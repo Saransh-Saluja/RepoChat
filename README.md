@@ -4,13 +4,12 @@ AI-powered assistant for understanding GitHub repositories.
 
 ## Build in Public
 
-I'm building RepoPilot step by step and documenting the engineering
-decisions and features as they are developed.
+I'm building RepoPilot step by step and documenting the engineering decisions and features as they are developed.
 
 ## Progress
 
 - [x] Day 1 — Project foundation
-- [ ] Day 2 — Authentication
+- [x] Day 2 — Authentication
 - [ ] Day 3 — GitHub repository integration
 - [ ] Day 4 — Repository ingestion
 - [ ] Day 5 — Code chunking and embeddings
@@ -22,16 +21,15 @@ decisions and features as they are developed.
 - [ ] Day 11 — Performance and error handling
 - [ ] Day 12 — Deployment
 
-## Day 1
+## Day 2
 
-Today I set up the initial Next.js application and established the database
-foundation using PostgreSQL and Prisma.
+Today I added authentication and connected authenticated users to the application's database.
 
-### Initial goals
+### What was added
 
-- Set up the Next.js application
-- Configure TypeScript
-- Set up PostgreSQL
-- Configure Prisma
-- Create the initial User and Project models
-- Establish the basic application structure
+- Clerk authentication
+- Sign in / sign up flow
+- Protected dashboard route
+- User session handling
+- Clerk user → PostgreSQL/Prisma user synchronization
+- Basic authenticated application layout

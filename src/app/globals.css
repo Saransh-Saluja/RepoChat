@@ -31,3 +31,36 @@ h1 {
 p {
   color: #666;
 }
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+button {
+  padding: 10px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #111;
+  color: white;
+  cursor: pointer;
+}
+
+a {
+  color: #111;
+  text-decoration: underline;
+}
+
+.app-layout {
+  min-height: 100vh;
+}
+
+.app-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  border-bottom: 1px solid #eee;
+}
