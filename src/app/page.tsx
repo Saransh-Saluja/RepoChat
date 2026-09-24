@@ -1,26 +1,21 @@
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
-import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
+import { Nav } from "~/components/landing/nav";
+import { Hero } from "~/components/landing/hero";
+import { Features } from "~/components/landing/features";
+import { HowItWorks } from "~/components/landing/how-it-works";
+import { Footer } from "~/components/landing/footer";
 
-export default function Home() {
+export default async function LandingPage() {
+  const { userId } = await auth();
+  const signedIn = !!userId;
+
   return (
-    <main>
-      <h1>RepoPilot</h1>
-      <p>An AI-powered assistant for understanding GitHub repositories.</p>
-
-      <SignedOut>
-        <div className="actions">
-          <SignInButton mode="modal">
-            <button>Sign in</button>
-          </SignInButton>
-          <SignUpButton mode="modal">
-            <button>Get started</button>
-          </SignUpButton>
-        </div>
-      </SignedOut>
-
-      <SignedIn>
-        <Link href="/dashboard">Go to dashboard →</Link>
-      </SignedIn>
-    </main>
+    <div className="min-h-screen">
+      <Nav signedIn={signedIn} />
+      <Hero signedIn={signedIn} />
+      <Features />
+      <HowItWorks />
+      <Footer signedIn={signedIn} />
+    </div>
   );
 }

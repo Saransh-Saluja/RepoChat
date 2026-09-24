@@ -1,66 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #14171c;
+  --color-surface: #1b1f26;
+  --color-surface-2: #20242c;
+  --color-border: #2a2f38;
+  --color-ink: #e7e9ec;
+  --color-muted: #8b93a1;
+  --color-accent: #e8a33d;
+  --color-accent-ink: #1a1206;
+  --color-diff-add: #5fb489;
+  --color-diff-del: #d9695f;
+
+  --font-display: var(--font-fraunces), "Iowan Old Style", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), "SF Mono", ui-monospace, monospace;
+
+  --animate-reveal: reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  color: var(--color-ink);
+}
+
+/* Thin, quiet scrollbar that fits the ink palette instead of the OS default */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body {
-  min-height: 100%;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #ffffff;
-  color: #111111;
-}
-
-main {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-h1 {
-  font-size: 48px;
-}
-
-p {
-  color: #666;
-}
-
-.actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-button {
-  padding: 10px 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #111;
-  color: white;
-  cursor: pointer;
-}
-
-a {
-  color: #111;
-  text-decoration: underline;
-}
-
-.app-layout {
-  min-height: 100vh;
-}
-
-.app-header {
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  border-bottom: 1px solid #eee;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
 }

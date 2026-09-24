@@ -1,32 +1,89 @@
+// RepoPilot data model.
+//
+// Kept intentionally small: one owner per project rather than a team join table.
+// Adding team sharing later is a one-model addition (a ProjectMember join table
+// mirroring the User <-> Project relation) — it doesn't require touching this schema.
+
 generator client {
-  provider = "prisma-client-js"
+    provider        = "prisma-client-js"
+    previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider   = "postgresql"
+    url        = env("DATABASE_URL")
+    extensions = [vector]
 }
 
 model User {
-  id        String   @id @default(cuid())
-  clerkId   String   @unique
-  email     String   @unique
-  createdAt DateTime @default(now())
+    id        String   @id // Clerk user id — no separate auth table needed
+    email     String   @unique
+    name      String?
+    imageUrl  String?
+    createdAt DateTime @default(now())
 
-  projects Project[]
+    projects  Project[]
+    questions Question[]
 }
 
 model Project {
-  id          String   @id @default(cuid())
-  name        String
-  repository  String
-  description String?
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
 
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    name      String
+    githubUrl String
+    description     String?
+    primaryLanguage String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+    ownerId String
+    owner   User   @relation(fields: [ownerId], references: [id])
 
-  @@index([userId])
+    // Real indexing progress — polled by the UI instead of a fake spinner.
+    status        String   @default("PENDING") // PENDING | INDEXING | READY | FAILED
+    totalFiles    Int      @default(0)
+    indexedFiles  Int      @default(0)
+    indexingError String?
+
+    files     FileEmbedding[]
+    questions Question[]
+
+    @@index([ownerId])
+}
+
+model FileEmbedding {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+
+    fileName  String
+    extension String?
+    sourceCode String
+    summary    String
+
+    embedding Unsupported("vector(768)")?
+
+    projectId String
+    project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    @@unique([projectId, fileName])
+    @@index([projectId, createdAt])
+}
+
+model Question {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+
+    question String
+    answer   String
+
+    // [{ fileName, summary }] — kept lightweight; full source isn't duplicated here,
+    // it's looked up from FileEmbedding by fileName when the history entry is opened.
+    filesReferences Json?
+
+    projectId String
+    project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+    userId String
+    user   User   @relation(fields: [userId], references: [id])
+
+    @@index([projectId, createdAt])
 }
